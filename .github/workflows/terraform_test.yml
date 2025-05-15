@@ -21,12 +21,15 @@ jobs:
 
       - name: Terraform format 
         run: terraform fmt -recursive 
-      
+
       - name: Terraform init 
-        run: terraform init 
-      
+        run: terraform init
+        working-directory: environments/dev
+
       - name: Terraform validate 
-        run: terraform validate 
+        run: terraform validate
+        working-directory: environments/dev 
 
       - name: Terraform plan 
-        run: terraform plan -var-file="dev.tfvars"
+        run: terraform plan -input=false
+        working-directory: environments/dev
