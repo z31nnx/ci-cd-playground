@@ -1,0 +1,32 @@
+name: Terraform 
+
+on: 
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    
+jobs: 
+  Terraform:
+    name: Format + Validate + Plan 
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Repo 
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform 
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform format 
+        run: terraform fmt -check -recursive 
+      
+      - name: Terraform init 
+        run: terraform init 
+      
+      - name: Terraform validate 
+        run: terraform validate 
+
+      - name: Terraform plan 
+        run: terraform plan -var-file="dev.tfvars"
