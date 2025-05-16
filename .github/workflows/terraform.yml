@@ -26,7 +26,7 @@ jobs:
           echo 'ami_name = "amazon_linux_2_ami"' >> dev.tfvars
           echo 'ec2_name = "web"' >> dev.tfvars
       - name: Upload dev.tfvars artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dev.tfvars
           path: .
@@ -50,7 +50,7 @@ jobs:
       - name: Terraform validate 
         run: terraform validate 
       - name: Download dev.tfvars artifact 
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dev.tfvars 
           path: .
