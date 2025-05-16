@@ -1,4 +1,4 @@
-name: Terraform Test 
+name: Terraform 
 
 on:
   push:
@@ -8,20 +8,56 @@ on:
   workflow_dispatch:
 
 jobs:
-  Terraform_job:
-    name: Format + Init + Validate 
+  create-dev-tfvars:
+    name: Generate dev.tfvars 
+    runs-on: ubuntu-latest 
+    defaults: 
+      run:
+        working-directory: environments/dev
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Input values for dev.tfvars 
+        run: |
+          echo 'environment = "Dev"' > dev.tfvars 
+          echo 'project = "Test"' >> dev.tfvars 
+          echo 'owner = "Bug"' >> dev.tfvars
+          echo 'managedby = "Terraform"' >> dev.tfvars
+          echo 'ami_name = "amazon_linux_2_ami"' >> dev.tfvars
+          echo 'ec2_name = "web"' >> dev.tfvars
+      - name: Upload dev.tfvars artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dev.tfvars
+          path: .
+          
+  Terraform:
+    name: Format + Init + Validate + Plan 
     runs-on: ubuntu-latest
+    needs: create-dev-tfvars
     defaults:
       run:
-        working-directory: environments/dev  
+        working-directory: environments/dev
     steps: 
-      - name: Get Repo
+      - name: Get Repo 
         uses: actions/checkout@v4
-      - name: Install Terraform
+      - name: Download Terraform 
         uses: hashicorp/setup-terraform@v3
-      - name: Terraform format
-        run: terraform fmt -recursive
-      - name: Terraform Init 
-        run: terraform init  
-      - name: Terraform Validate
-        run: terraform validate
+      - name: Terraform format 
+        run: terraform fmt -check -recursive
+      - name: Terraform init 
+        run: terraform init 
+      - name: Terraform validate 
+        run: terraform validate 
+      - name: Download dev.tfvars artifact 
+        uses: actions/download-artifact@v3
+        with:
+          name: dev.tfvars 
+          path: .
+    #  - name: Terraform plan 
+    #    run: terraform plan -input=false -var-file="dev.tfvars" -out=tfplan
+    #  - name: Upload tfplan artifact 
+    #    uses: actions/upload-artifact@v3
+    #    with: 
+    #      name: tfplan
+    #      path: tfplan             

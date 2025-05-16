@@ -1,0 +1,61 @@
+name: Terraform 
+
+on: 
+  push:
+    branches: [ main ]
+  pull_request: 
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  create-dev-tfvars:
+    name: Create a dev tfvars file 
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: environments/dev
+    steps:
+      - name: Add inputs
+        run: |
+          echo 'environment = "Dev"' > dev.tfvars
+          echo 'project = "Test"' >> dev.tfvars
+          echo 'owner = "Bug"' >> dev.tfvars
+          echo 'managedby = "Terraform"' >> dev.tfvars
+          echo 'ami_names = "amazon_linux_2_ami"' >> dev.tfvars
+          echo 'ec2_names = "web"' >> dev.tfvars
+      - name: Uploads tfvars
+        uses: actions/upload-artifact@v3
+        with:
+          name: dev.tfvars
+          path: dev.tfvars
+
+  Terraform:
+    name: Format + Initialize + Validate 
+    runs-on: ubuntu-latest
+    needs: dev_tfvars
+    defaults:
+      run:
+        working-directory: environments/dev
+    steps:
+      - name: Get repo 
+        uses: actions/checkout@v4
+      - name: Install Terraform 
+        uses: hashicorp/setup-terraform@v3
+      - name: Terraform format 
+        run: terraform fmt -check -recursive 
+      - name: Terraform init 
+        run: terraform init 
+      - name: Terraform validate 
+        run: terraform validate
+      - name: Download tfvars
+        uses: actions/download-artifact@v3
+        with:
+          name: dev.tfvars
+          path: environments/dev
+      - name: Terraform plan 
+        run: terraform plan -input=false -var-file="dev.tfvars" -out=tfplan 
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: tfplan
+          path: tfplan

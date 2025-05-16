@@ -9,16 +9,16 @@ terraform {
 
 locals {
   global_tags = {
-    Environment = "Dev"
-    Project     = "Testing"
-    Owner       = "Test"
-    ManagedBy   = "Terraform"
+    Environment = var.environment
+    Project     = var.project
+    Owner       = var.owner
+    ManagedBy   = var.managedby
   }
 }
 
 module "ec2_stack" {
   source    = "../../modules/ec2-stack"
-  ec2_name  = "web"
-  ami_names = "amazon-linux-ami-2"
+  ec2_name  = var.ec2_name
+  ami_names = var.ami_name
   tags      = local.global_tags
 }
