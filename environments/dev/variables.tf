@@ -7,6 +7,4 @@ variable "managedby" {}
 
 
 # EC2
-
-variable "ami_name" {}
 variable "ec2_name" {}

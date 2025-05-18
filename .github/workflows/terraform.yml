@@ -28,7 +28,6 @@ jobs:
           echo 'project = "Test"' >> dev.tfvars 
           echo 'owner = "Bug"' >> dev.tfvars
           echo 'managedby = "Terraform"' >> dev.tfvars
-          echo 'ami_name = "amazon_linux_2_ami"' >> dev.tfvars
           echo 'ec2_name = "web"' >> dev.tfvars
       - name: Upload tfvars artifact 
         uses: actions/upload-artifact@v4

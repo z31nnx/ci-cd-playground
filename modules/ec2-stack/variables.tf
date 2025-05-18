@@ -3,7 +3,6 @@ variable "tags" {
   type = map(string)
 }
 
-variable "ami_name" {}
 variable "ami_id" {
   type    = string
   default = "ami-09f4814ae750baed6"
