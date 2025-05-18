@@ -87,7 +87,7 @@ jobs:
           name: tfplan 
           path: .
       - name: Terraform apply  
-        run: terraform apply tfplan -auto-approve
+        run: terraform apply -auto-approve tfplan
       
   terraform-destroy:
     name: Nuke infrastructure 
@@ -108,4 +108,4 @@ jobs:
           name: dev.tfvars
           path: . 
       - name: Terraform destroy 
-        run: terraform destroy -var-file="dev.tfvars" -autoapprove
+        run: terraform destroy -auto-approve -var-file="dev.tfvars"
