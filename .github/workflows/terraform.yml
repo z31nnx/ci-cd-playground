@@ -79,6 +79,8 @@ jobs:
     steps: 
       - name: Get repo 
         uses: actions/checkout@v4
+      - name: Download terraform 
+        uses: hashicorp/setup-terraform@v3
       - name: Download tfplan artifact 
         uses: actions/download-artifact@v4
         with:
@@ -98,6 +100,8 @@ jobs:
     steps: 
       - name: Get repo 
         uses: actions/checkout@v4
+      - name: Download terraform 
+        uses: hashicorp/setup-terraform@v3
       - name: Download dev.tfvars artifact 
         uses: actions/download-artifact@v4
         with: 
