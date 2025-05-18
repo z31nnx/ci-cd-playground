@@ -82,6 +82,10 @@ jobs:
         uses: actions/checkout@v4
       - name: download terraform 
         uses: hashicorp/setup-terraform@v3
+      - name: Terraform init
+        run: terraform init
+      - name: Terraform validate
+        run: terraform validate
       - name: Download tfplan artifact 
         uses: actions/download-artifact@v4
         with:
