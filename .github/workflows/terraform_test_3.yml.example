@@ -34,6 +34,8 @@ jobs:
         with: 
           name: dev.tfvars
           path: .
+      - name: Debug files 
+        run: ls -la   
 
   terraform-build: 
     name: Terraform format + init + validate + plan 
@@ -66,7 +68,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with: 
           name: tfplan
-          path: environments/dev/tfplan
+          path: tfplan
+      - name: Debug files 
+        run: ls -la   
   
   terraform-deploy:
     name: Terraform apply
@@ -84,10 +88,12 @@ jobs:
       - name: Download tfplan artifact 
         uses: actions/download-artifact@v4
         with:
-          name: tfplan 
+          name: dev.tfvars
           path: .
+      - name: Debug files 
+        run: ls -la     
       - name: Terraform apply  
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -var-file="dev.tfvars" -auto-approve 
       
   terraform-destroy:
     name: Nuke infrastructure 
@@ -106,6 +112,8 @@ jobs:
         uses: actions/download-artifact@v4
         with: 
           name: dev.tfvars
-          path: . 
+          path: .
+      - name: Debug files 
+        run: ls -la   
       - name: Terraform destroy 
-        run: terraform destroy -auto-approve -var-file="dev.tfvars"
+        run: terraform destroy -var-file="dev.tfvars" -auto-approve
