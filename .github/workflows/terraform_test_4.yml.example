@@ -24,7 +24,7 @@ jobs:
       - name: Generate tfvars
         run: |
           echo 'environment = "Dev"' > dev.tfvars 
-          echo 'project = "Test"' >> dev.tfvars
+          echo 'project = "CI/CD"' >> dev.tfvars
           echo 'owner = "Bug"' >> dev.tfvars
           echo 'managedby = "Terraform"' >> dev.tfvars
           echo 'ec2_name = "web"' >> dev.tfvars
@@ -91,7 +91,8 @@ jobs:
         with:
           name: planfile
           path: environments/dev
+      - name: Terraform apply 
+        run: terraform apply tfplan 
       - name: Debug files 
         run: ls -la
-      - name: Terraform apply 
-        run: terraform apply tfplan    
+  
